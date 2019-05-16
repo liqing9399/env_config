@@ -1,14 +1,31 @@
-alias gst='git statue'
-alias glg='git log'
+alias gst='git status'
+alias glg='git log --stat'
 alias gco='git checkout'
 alias gbc='git branch'
 alias gba='git branch -av'
 alias gad='git add'
 alias gcm='git commit'
+alias gdf='git diff'
 alias gcma='git commit --amend'
 alias gpl='git pull'
 alias gplr='git pull --rebase'
 alias gps='git push origin'
 
+alias vim="vim -o "
+alias v='vim'
+alias val='vim ~/.bash_aliases'
+alias vvrc='vim ~/.vimrc'
+
 alias cl='clear'
 alias cdd='cd ~/data_struct'
+alias sal='source ~/.bash_aliases'
+alias svrc='source ~/.vimrc'
+alias cz3='cd ~/z3'
+alias cz3cp='cd ~/z3/examples/c++'
+alias csn='cd ~/stochasticNeuralNetwork'
+
+alias m='cd ./build; make -j32; cd -'
+alias ms='cd ../build; make -j32; cd -'
+
+alias snt='cd ~/stochasticNeuralNetwork/build; ./snnTest; cd -'
+alias gsnt='cd ~/stochasticNeuralNetwork/build; gdb ./snnTest; cd -'
