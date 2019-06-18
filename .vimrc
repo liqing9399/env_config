@@ -23,8 +23,6 @@
 "    -> Spell checking
 "    -> Misc
 "    -> Helper functions
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 " ------------------- write by myself begin -------------------
@@ -79,13 +77,12 @@ set autoread
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
 let mapleader = ","
-
 " Fast saving
 nmap <leader>w :w!<cr>
 
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
-command W w !sudo tee % > /dev/null
+"command W w !sudo tee % > /dev/null
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -416,5 +413,157 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
 set tags=./tags,./TAGS,tags;~,TAGS;
 
+"nmap <leader>r :  /\s\+$//g <cr>
+
+"删除行尾空格
+ 
+
+
+
+" 第一版
+"let mapleader = ","
+"nmap <leader>s : call SetTitle()<cr>
+"配置文件初始化内容。
+
+"""""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"新建.c,.h,.sh,.java文件，自动插入文件头 
+autocmd BufNewFile *.sh,*.py,*.java exec ":call SetTitle()" 
+""""定义函数SetTitle，自动插入文件头 
+function! SetTitle() 
+      "如果文件类型为.sh文件 
+      if &filetype == 'sh' 
+          call setline(1,"\#!/bin/bash") 
+          call append(line("."),"\#########################################################################") 
+          call append(line(".")+1, "\# File Name   : ".expand("%"))
+          call append(line(".")+2, "\# Author      : litao")
+          call append(line(".")+3, "\# Email       : 362085095@qq.com")
+          call append(line(".")+4, "\# Blog        ：http:// ")
+          call append(line(".")+5, "\# Created Time: ".strftime("%c"))
+          call append(line(".")+6, "\#########################################################################")
+          call append(line(".")+7, "")
+      elseif &filetype == 'python'
+          call setline(1,"\#!/usr/bin/env python")
+          call append(line("."),"\#########################################################################")
+          call append(line(".")+1, "\# File Name    : ".expand("%"))
+          call append(line(".")+2, "\# Author       : litao")
+          call append(line(".")+3, "\# Email        : 362085095@qq.com")
+          call append(line(".")+4, "\# Blog         ：http:// ")
+          call append(line(".")+5, "\# Created Time : ".strftime("%c"))
+          call append(line(".")+6, "\#########################################################################")
+          call append(line(".")+7, "")
+      "else
+      "    call setline(1, "/*************************************************************************") 
+      "    call append(line("."),   "\# File Name    : ".expand("%"))
+      "    call append(line(".")+1, "\# Author       : litao")
+      "    call append(line(".")+2, "\# Email        : 362085095@qq.com")
+      "    call append(line(".")+3, "\# Blog         ：http:// ")
+      "    call append(line(".")+4, "\# Created Time : ".strftime("%c"))
+      "    call append(line(".")+5, "************************************************************************/") 
+      "    call append(line(".")+6, "")
+      endif
+      "if &filetype == 'cpp'
+      "    call append(line(".")+7, "#include <iostream>")
+      "    call append(line(".")+8, "using namespace std;")
+      "    call append(line(".")+9, "")
+      "endif
+      "if &filetype == 'hpp'
+      "    call append(line(".")+7, "#include <iostream>")
+      "    call append(line(".")+8, "using namespace std;")
+      "    call append(line(".")+9, "")
+      "endif
+      "if &filetype == 'c'
+      "    call append(line(".")+7, "#include<stdio.h>")
+      "    call append(line(".")+8, "")
+      "endif
+"新建文件后，自动定位到文件末尾
+endfunction
+autocmd BufNewFile * normal G
+
+
+
+"nmap <leader>a :call AddAuthor()<cr>
+"nmap <leader>u :call UpdateTitle()<cr>
+" 
+"function! AddAuthor()
+"        let n=1
+"        while n < 5
+"            let line = getline(n)
+"            if line =~'^\s*\*\s*\S*Last\s*modified\s*:\s*\S*.*$'
+"            call UpdateTitle()
+"            return
+"            endif
+"            let n = n + 1
+"        endwhile
+"        call AddTitle()
+"endfunction
+"
+"function! UpdateTitle()
+"        normal m'
+"        execute '/* Last modified\s*:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
+"        normal "
+"        normal mk
+"        execute '/* Filename\s*:/s@:.*$@\=": ".expand("%:t")@'
+"        execute "noh"
+"        normal 'k
+"        echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
+"endfunction
+"        
+"function! AddTitle()
+"        "call append(0,"#!/usr/local/python3/bin/python3")
+"        call append(1,"############################################################")
+"        call append(2,"# Author        : litao")
+"        call append(3,"# Email         : 362085095@qq.com")
+"        call append(4,"# Last modified : ".strftime("%Y-%m-%d %H:%M"))
+"        call append(5,"# Filename      : ".expand("%:t"))
+"        call append(6,"# Description   : ")
+"        call append(7,"###########################################################")
+"        echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
+"endfunction
+
+
+
+
+
+
+" 第三版本
+autocmd BufNewFile *.cpp,*.hpp,*.[ch] exec ":call FileHead()" 
+map <F7> :call FileHead()<CR>
+let mapleader = ","
+nmap <leader>a : call MainFun()<cr>
+
+function! FileHead()
+    call append( 0,"/***************************************************")
+    call append( 1,"#filename      : ".expand("%:t")                     )
+    call append( 2,"#author        : litao"                              )
+    call append( 3,"#e-mail        : 362085095@qq.com"                   )
+    call append( 4,"#create time   : ".strftime("%Y-%m-%d %H:%M:%S")     )
+    call append( 5,"#last modified : ".strftime("%Y-%m-%d %H:%M:%S")     )
+    call append( 6,"#description   : NA"                                 )
+    call append( 7,"***************************************************/")
+endfunction
+
+function! MainFun()
+    call append( 8,"#include <iostream>"                                 )
+    call append( 9,"#include <vector>"                                   )
+    call append(10,"#include <string>"                                   )
+    call append(11,""                                                    )
+    call append(12,"using namespace std;"                                )
+    call append(13,"int main(int argc,char *argv[]) {"                   )
+    call append(14,"  return 0;"                                         )
+    call append(15,"}"                                                   )
+    call append(16,""                                                    )
+    call append(17,""                                                    )
+    echo
+endfunction
+                                           
+function! SetLastModifiedTimes()
+    let line = getline(6)
+    let newtime = "#last modified : ".strftime("%Y-%m-%d %H:%M:%S")
+    let repl = substitute(line,".*$",newtime,"g")
+    call setline(6,repl)
+endfunction
+
+autocmd BufWrite *.cpp,*.hpp,*.c,*,h call SetLastModifiedTimes()
