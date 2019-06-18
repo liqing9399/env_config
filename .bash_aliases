@@ -9,7 +9,7 @@ alias gdf='git diff'
 alias gcma='git commit --amend'
 alias gpl='git pull'
 alias gplr='git pull --rebase'
-alias gps='git push origin'
+alias gps='git push origin master'
 
 alias vim="vim -o "
 alias v='vim'
@@ -25,7 +25,9 @@ alias cz3cp='cd ~/z3/examples/c++'
 alias csn='cd ~/stochasticNeuralNetwork'
 
 alias m='cd ./build; make -j32; cd -'
-alias ms='cd ../build; make -j32; cd -'
+alias sm='cd ../build; make -j32; cd -'
 
 alias snt='cd ~/stochasticNeuralNetwork/build; ./snnTest; cd -'
 alias gsnt='cd ~/stochasticNeuralNetwork/build; gdb ./snnTest; cd -'
+alias gag='gdb --args'
+alias ct='ctags -R *'
