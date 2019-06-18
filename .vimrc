@@ -1,5 +1,5 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Maintainer: 
+" Maintainer:
 "       Amir Salihefendic — @amix3k
 "
 " Awesome_version:
@@ -36,13 +36,13 @@ nmap m  N
 nmap ge G
 nmap <F3> :NERDTreeToggle<CR>
 
-"不同时显示多个文件的tag，只显示当前文件的 
-let Tlist_Show_One_File=1 
+"不同时显示多个文件的tag，只显示当前文件的
+let Tlist_Show_One_File=1
 
-"如果taglist窗口是最后一个窗口，则退出vim 
-let Tlist_Exit_OnlyWindow=1 
+"如果taglist窗口是最后一个窗口，则退出vim
+let Tlist_Exit_OnlyWindow=1
 
-"将taglist与ctags关联 
+"将taglist与ctags关联
 let Tlist_Ctags_Cmd="/usr/bin/ctags"
 
 "let Tlist_Ctags_Cmd="/usr/bin/ctags"
@@ -53,7 +53,7 @@ set nocompatible
 " vimrc文件修改之后自动加载, linux
 autocmd! bufwritepost .vimrc source %
 
-" if has(autocmd) 
+" if has(autocmd)
 "   autocmd! bufwritepost vimrc source ~/.
 " endif
 
@@ -80,7 +80,7 @@ let mapleader = ","
 " Fast saving
 nmap <leader>w :w!<cr>
 
-" :W sudo saves the file 
+" :W sudo saves the file
 " (useful for handling the permission-denied error)
 "command W w !sudo tee % > /dev/null
 
@@ -92,7 +92,7 @@ nmap <leader>w :w!<cr>
 set so=7
 
 " Avoid garbled characters in Chinese language windows OS
-let $LANG='en' 
+let $LANG='en'
 set langmenu=en
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
@@ -124,23 +124,23 @@ set whichwrap+=<,>,h,l
 " Ignore case when searching
 set ignorecase
 
-" When searching try to be smart about cases 
+" When searching try to be smart about cases
 set smartcase
 
 " Highlight search results
 set hlsearch
 
 " Makes search act like search in modern browsers
-set incsearch 
+set incsearch
 
 " Don't redraw while executing macros (good performance config)
-set lazyredraw 
+set lazyredraw
 
 " For regular expressions turn magic on
 set magic
 
 " Show matching brackets when text indicator is over them
-set showmatch 
+set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
@@ -164,7 +164,7 @@ set foldcolumn=1
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
-syntax enable 
+syntax enable
 
 " Enable 256 colors palette in Gnome Terminal
 if $COLORTERM == 'gnome-terminal'
@@ -262,8 +262,8 @@ map <leader>h :bprevious<cr>
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove 
-map <leader>t<leader> :tabnext 
+map <leader>tm :tabmove
+map <leader>t<leader> :tabnext
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -278,7 +278,7 @@ map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-" Specify the behavior when switching between buffers 
+" Specify the behavior when switching between buffers
 try
   set switchbuf=useopen,usetab,newtab
   set stal=2
@@ -395,7 +395,7 @@ endfunction
 
 function! CmdLine(str)
     call feedkeys(":" . a:str)
-endfunction 
+endfunction
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -416,10 +416,9 @@ endfunction
 
 set tags=./tags,./TAGS,tags;~,TAGS;
 
-"nmap <leader>r :  /\s\+$//g <cr>
-
 "删除行尾空格
- 
+autocmd BufWritePre * %s/\s\+$//e
+
 
 
 
@@ -429,14 +428,14 @@ set tags=./tags,./TAGS,tags;~,TAGS;
 "配置文件初始化内容。
 
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"新建.c,.h,.sh,.java文件，自动插入文件头 
-autocmd BufNewFile *.sh,*.py,*.java exec ":call SetTitle()" 
-""""定义函数SetTitle，自动插入文件头 
-function! SetTitle() 
-      "如果文件类型为.sh文件 
-      if &filetype == 'sh' 
-          call setline(1,"\#!/bin/bash") 
-          call append(line("."),"\#########################################################################") 
+"新建.c,.h,.sh,.java文件，自动插入文件头
+autocmd BufNewFile *.sh,*.py,*.java exec ":call SetTitle()"
+""""定义函数SetTitle，自动插入文件头
+function! SetTitle()
+      "如果文件类型为.sh文件
+      if &filetype == 'sh'
+          call setline(1,"\#!/bin/bash")
+          call append(line("."),"\#########################################################################")
           call append(line(".")+1, "\# File Name   : ".expand("%"))
           call append(line(".")+2, "\# Author      : litao")
           call append(line(".")+3, "\# Email       : 362085095@qq.com")
@@ -455,13 +454,13 @@ function! SetTitle()
           call append(line(".")+6, "\#########################################################################")
           call append(line(".")+7, "")
       "else
-      "    call setline(1, "/*************************************************************************") 
+      "    call setline(1, "/*************************************************************************")
       "    call append(line("."),   "\# File Name    : ".expand("%"))
       "    call append(line(".")+1, "\# Author       : litao")
       "    call append(line(".")+2, "\# Email        : 362085095@qq.com")
       "    call append(line(".")+3, "\# Blog         ：http:// ")
       "    call append(line(".")+4, "\# Created Time : ".strftime("%c"))
-      "    call append(line(".")+5, "************************************************************************/") 
+      "    call append(line(".")+5, "************************************************************************/")
       "    call append(line(".")+6, "")
       endif
       "if &filetype == 'cpp'
@@ -486,7 +485,7 @@ autocmd BufNewFile * normal G
 
 "nmap <leader>a :call AddAuthor()<cr>
 "nmap <leader>u :call UpdateTitle()<cr>
-" 
+"
 "function! AddAuthor()
 "        let n=1
 "        while n < 5
@@ -510,7 +509,7 @@ autocmd BufNewFile * normal G
 "        normal 'k
 "        echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
 "endfunction
-"        
+"
 "function! AddTitle()
 "        "call append(0,"#!/usr/local/python3/bin/python3")
 "        call append(1,"############################################################")
@@ -529,7 +528,7 @@ autocmd BufNewFile * normal G
 
 
 " 第三版本
-autocmd BufNewFile *.cpp,*.hpp,*.[ch] exec ":call FileHead()" 
+autocmd BufNewFile *.cpp,*.hpp,*.[ch] exec ":call FileHead()"
 map <F7> :call FileHead()<CR>
 let mapleader = ","
 nmap <leader>a : call MainFun()<cr>
@@ -558,7 +557,7 @@ function! MainFun()
     call append(17,""                                                    )
     echo
 endfunction
-                                           
+
 function! SetLastModifiedTimes()
     let line = getline(6)
     let newtime = "#last modified : ".strftime("%Y-%m-%d %H:%M:%S")
@@ -566,4 +565,4 @@ function! SetLastModifiedTimes()
     call setline(6,repl)
 endfunction
 
-autocmd BufWrite *.cpp,*.hpp,*.c,*,h call SetLastModifiedTimes()
+autocmd BufWrite *.cpp,*.hpp,*.c,*.h call SetLastModifiedTimes()
