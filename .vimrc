@@ -23,18 +23,116 @@
 "    -> Spell checking
 "    -> Misc
 "    -> Helper functions
-
+"
 
 " ------------------- write by myself begin -------------------
+call plug#begin('~/.vim/plugged')
+Plug 'w0rp/ale'
+Plug 'vim-airline/vim-airline'
+call plug#end()
+
+let mapleader = ","
+" 设为 1 ale 失效， 0 则有效。
+let g:ale_linters_explicit = 0
+let g:ale_completion_delay = 500
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+"let g:ale_lint_on_text_changed = 'normal'
+"let g:ale_lint_on_insert_leave = 1
+set fenc=
+
+" ale-setting {{{
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"let g:ale_statusline_format = ['{%d}', '{%d}', '']
+let g:airline#extensions#ale#enabled = 1
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" 0 打开文件时不进行检查 ， 1 则检查
+let g:ale_lint_on_enter = 1
+" 1
+let g:ale_open_list = 0
+
+"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+nmap sp <Plug>(ale_previous_wrap)
+nmap sn <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检查
+nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>d :ALEDetail<CR>
+"使用gcc和g++对c和c++进行语法检查，对python使用pylint进行语法检查
+let g:ale_linters = {
+      \   'c++': ['g++'],
+      \   'c': ['g++'],
+      \   'python': ['pylint'],
+      \}
+let g:ale_cpp_gcc_options = '-Wall -Wno-sign-compare -O3 -std=c++14 '
+let g:ale_c_parse_compile_commands = 1
+
+let g:ale_c_gcc_options = '-Wall -Wno-sign-compare -O3 -std=c++14'
+let g:ale_c_cppcheck_options = ''
+
+let g:ale_cpp_cppcheck_executable = 'cppcheck'
+"let g:ale_cpp_cppcheck_options = '--enable=all'
+let g:ale_cpp_cppcheck_options = '--enable=style'
+let g:ale_cpp_cpplint_executable ='cpplint'
+let g:ale_cpp_cpplint_options = ''
+" 查看当前行所有的错误与警告
+" :lopen
+
+function! LinterStatus() abort
+      let l:counts = ale#statusline#Count(bufnr(''))
+      let l:all_errors = l:counts.error + l:counts.style_error
+      let l:all_non_errors = l:counts.total - l:all_errors
+      return l:counts.total == 0 ? 'OK' : printf(
+             \   '⚡%dW ✗%dE',
+             \   all_non_errors,
+             \   all_errors
+             \)
+endfunction
+" Format the status line
+set statusline=\%{LinterStatus()}\ \ %{HasPaste()}%F%m%r%h\ %w\ \ Line:\ %l\ \ Column:\ %c
+"set statusline=\%{LinterStatus()}\ \ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+
+
 set nu
 set hls
-nmap ,, *
-nmap ;e $
-nmap ;h ^
-nmap ;; %
-nmap m  N
-nmap ge G
-nmap <F3> :NERDTreeToggle<CR>
+set cc=89
+"换行不自动注释
+set paste
+"删除空白行
+nnoremap <leader>r :g/^\s*$/d<cr>
+
+" nnoremap 表示不递归映射，建议全部替换为nnoremap
+nnoremap ,, *
+nnoremap ;e $
+nnoremap ;h ^
+nnoremap ;; %
+nnoremap m  N
+nnoremap ge G
+
+"将当前单词使用“”扩起来。
+nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
+nnoremap <F3> :NERDTreeToggle<CR>
+inoremap jk <esc>
+nnoremap <leader>i :ALEInfo<cr>
+
+" 将esc映射为啥也不干，方便熟悉jk退出插入模式
+"inoremap <esc> <nop>
+
+" 如果是cpp则 使用映射之后的键会将当前行注释
+autocmd FileType cpp     nnoremap <buffer> <leader>c I//<esc>
+
+" 插入模式下， 单独的 @@ 字符将会呗替换成 litao@cambricon.com
+iabbrev @@ litao@cambricon.com
+
+"note: 头文件中为实现的函数不显示。
 
 "不同时显示多个文件的tag，只显示当前文件的
 let Tlist_Show_One_File=1
@@ -43,10 +141,10 @@ let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 
 "将taglist与ctags关联
+"let Tlist_Ctags_Cmd="~/stochasticNeuralNetwork/ctags"
 let Tlist_Ctags_Cmd="/usr/bin/ctags"
 
-"let Tlist_Ctags_Cmd="/usr/bin/ctags"
-nmap T :Tlist<CR>
+nnoremap T :Tlist<CR>
 
 set nocompatible
 
@@ -56,6 +154,12 @@ autocmd! bufwritepost .vimrc source %
 " if has(autocmd)
 "   autocmd! bufwritepost vimrc source ~/.
 " endif
+
+" 插入模式下上下左右移动光标  linux 命令行可用，cmder不可用。
+ inoremap <c-h> <left>
+ inoremap <c-l> <right>
+ inoremap <c-j> <c-o>gj
+ inoremap <c-k> <c-o>gk
 
 
 " -------------------- end --------------------------------------
@@ -237,17 +341,17 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " => Moving around, tabs, windows and buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-map <space> /
-map <c-space> ?
+nnoremap <c-space> :set noic<cr>?
+nnoremap <space> :set noic<cr>/
 
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
 
 " Smart way to move between windows
-"map <C-j> <C-W>j
-"map <C-k> <C-W>k
-"map <C-h> <C-W>h
-"map <C-l> <C-W>l
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 " Close the current buffer
 map <leader>bd :Bclose<cr>:tabclose<cr>gT
@@ -295,8 +399,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " Always show the status line
 set laststatus=2
 
-" Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -328,7 +430,8 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+    autocmd BufWritePre *.cpp,*.hpp,*.c,*.h,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+    "autocmd BufWritePre * %s/\s\+$//e
 endif
 
 
@@ -417,123 +520,54 @@ endfunction
 set tags=./tags,./TAGS,tags;~,TAGS;
 
 "删除行尾空格
-autocmd BufWritePre * %s/\s\+$//e
 
 
 
-
-" 第一版
-"let mapleader = ","
-"nmap <leader>s : call SetTitle()<cr>
-"配置文件初始化内容。
 
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"新建.c,.h,.sh,.java文件，自动插入文件头
-autocmd BufNewFile *.sh,*.py,*.java exec ":call SetTitle()"
-""""定义函数SetTitle，自动插入文件头
-function! SetTitle()
-      "如果文件类型为.sh文件
-      if &filetype == 'sh'
-          call setline(1,"\#!/bin/bash")
-          call append(line("."),"\#########################################################################")
-          call append(line(".")+1, "\# File Name   : ".expand("%"))
-          call append(line(".")+2, "\# Author      : litao")
-          call append(line(".")+3, "\# Email       : 362085095@qq.com")
-          call append(line(".")+4, "\# Blog        ：http:// ")
-          call append(line(".")+5, "\# Created Time: ".strftime("%c"))
-          call append(line(".")+6, "\#########################################################################")
-          call append(line(".")+7, "")
-      elseif &filetype == 'python'
-          call setline(1,"\#!/usr/bin/env python")
-          call append(line("."),"\#########################################################################")
-          call append(line(".")+1, "\# File Name    : ".expand("%"))
-          call append(line(".")+2, "\# Author       : litao")
-          call append(line(".")+3, "\# Email        : 362085095@qq.com")
-          call append(line(".")+4, "\# Blog         ：http:// ")
-          call append(line(".")+5, "\# Created Time : ".strftime("%c"))
-          call append(line(".")+6, "\#########################################################################")
-          call append(line(".")+7, "")
-      "else
-      "    call setline(1, "/*************************************************************************")
-      "    call append(line("."),   "\# File Name    : ".expand("%"))
-      "    call append(line(".")+1, "\# Author       : litao")
-      "    call append(line(".")+2, "\# Email        : 362085095@qq.com")
-      "    call append(line(".")+3, "\# Blog         ：http:// ")
-      "    call append(line(".")+4, "\# Created Time : ".strftime("%c"))
-      "    call append(line(".")+5, "************************************************************************/")
-      "    call append(line(".")+6, "")
-      endif
-      "if &filetype == 'cpp'
-      "    call append(line(".")+7, "#include <iostream>")
-      "    call append(line(".")+8, "using namespace std;")
-      "    call append(line(".")+9, "")
-      "endif
-      "if &filetype == 'hpp'
-      "    call append(line(".")+7, "#include <iostream>")
-      "    call append(line(".")+8, "using namespace std;")
-      "    call append(line(".")+9, "")
-      "endif
-      "if &filetype == 'c'
-      "    call append(line(".")+7, "#include<stdio.h>")
-      "    call append(line(".")+8, "")
-      "endif
-"新建文件后，自动定位到文件末尾
+"新建.sh,.java文件，自动插入文件头
+autocmd BufNewFile *.sh,*.py,*.java exec ":call Scritpt_FileHead()"
+function! Scritpt_FileHead()
+    if &filetype == 'sh'
+        call append( 0,"#######s############################################")
+        call append( 1,"#filename      : ".expand("%:t")                     )
+        call append( 2,"#author        : litao"                              )
+        call append( 3,"#e-mail        : 362085095@qq.com"                   )
+        call append( 4,"#create time   : ".strftime("%Y-%m-%d %H:%M:%S")     )
+        call append( 5,"#last modified : ".strftime("%Y-%m-%d %H:%M:%S")     )
+        call append( 6,"####################################################")
+        call append( 7,"\#!/bin/bash")
+    elseif &filetype == 'python'
+        call append( 0,"#######p############################################")
+        call append( 1,"#filename      : ".expand("%:t")                     )
+        call append( 2,"#author        : litao"                              )
+        call append( 3,"#e-mail        : 362085095@qq.com"                   )
+        call append( 4,"#create time   : ".strftime("%Y-%m-%d %H:%M:%S")     )
+        call append( 5,"#last modified : ".strftime("%Y-%m-%d %H:%M:%S")     )
+        call append( 6,"####################################################")
+        call append( 7,"\#!/usr/bin/env python")
+    endif
 endfunction
+"新建文件后，自动定位到文件末尾
 autocmd BufNewFile * normal G
+map <F6> :call Scritpt_FileHead()<CR>
 
+function! Script_SetLastModifiedTimes()
+    let line = getline(6)
+    let newtime = "#last modified : ".strftime("%Y-%m-%d %H:%M:%S")
+    if -1 == match(line, "last modified") "not match
+      call Scritpt_FileHead();
+    else  "match
+      let repl = substitute(line,".*$",newtime,"g")
+      call setline(6,repl)
+    endif
+endfunction
 
+autocmd BufWrite *.sh,*.py call Script_SetLastModifiedTimes()
 
-"nmap <leader>a :call AddAuthor()<cr>
-"nmap <leader>u :call UpdateTitle()<cr>
-"
-"function! AddAuthor()
-"        let n=1
-"        while n < 5
-"            let line = getline(n)
-"            if line =~'^\s*\*\s*\S*Last\s*modified\s*:\s*\S*.*$'
-"            call UpdateTitle()
-"            return
-"            endif
-"            let n = n + 1
-"        endwhile
-"        call AddTitle()
-"endfunction
-"
-"function! UpdateTitle()
-"        normal m'
-"        execute '/* Last modified\s*:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
-"        normal "
-"        normal mk
-"        execute '/* Filename\s*:/s@:.*$@\=": ".expand("%:t")@'
-"        execute "noh"
-"        normal 'k
-"        echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
-"endfunction
-"
-"function! AddTitle()
-"        "call append(0,"#!/usr/local/python3/bin/python3")
-"        call append(1,"############################################################")
-"        call append(2,"# Author        : litao")
-"        call append(3,"# Email         : 362085095@qq.com")
-"        call append(4,"# Last modified : ".strftime("%Y-%m-%d %H:%M"))
-"        call append(5,"# Filename      : ".expand("%:t"))
-"        call append(6,"# Description   : ")
-"        call append(7,"###########################################################")
-"        echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
-"endfunction
-
-
-
-
-
-
-" 第三版本
-autocmd BufNewFile *.cpp,*.hpp,*.[ch] exec ":call FileHead()"
-map <F7> :call FileHead()<CR>
-let mapleader = ","
-nmap <leader>a : call MainFun()<cr>
-
-function! FileHead()
+"新建.cpp, .hpp, .c, .h文件，自动插入文件头
+autocmd BufNewFile *.cpp,*.hpp,*.[ch] exec ":call C_FileHead()"
+function! C_FileHead()
     call append( 0,"/***************************************************")
     call append( 1,"#filename      : ".expand("%:t")                     )
     call append( 2,"#author        : litao"                              )
@@ -543,8 +577,9 @@ function! FileHead()
     call append( 6,"#description   : NA"                                 )
     call append( 7,"***************************************************/")
 endfunction
+map <F7> :call C_FileHead()<CR>
 
-function! MainFun()
+function! C_MainFun()
     call append( 8,"#include <iostream>"                                 )
     call append( 9,"#include <vector>"                                   )
     call append(10,"#include <string>"                                   )
@@ -557,12 +592,18 @@ function! MainFun()
     call append(17,""                                                    )
     echo
 endfunction
+nmap <leader>m : call C_MainFun()<cr>
 
-function! SetLastModifiedTimes()
+function! C_SetLastModifiedTimes()
     let line = getline(6)
     let newtime = "#last modified : ".strftime("%Y-%m-%d %H:%M:%S")
-    let repl = substitute(line,".*$",newtime,"g")
-    call setline(6,repl)
+    if -1 == match(line, "last modified") "not match
+      call C_FileHead()<cr>;
+    else  "match
+      let repl = substitute(line,".*$",newtime,"g")
+      call setline(6,repl)
+    endif
 endfunction
 
-autocmd BufWrite *.cpp,*.hpp,*.c,*.h call SetLastModifiedTimes()
+autocmd BufWrite *.cpp,*.hpp,*.c,*.h call C_SetLastModifiedTimes()
+nmap <leader>u : call C_SetLastModifiedTimes()<cr>
