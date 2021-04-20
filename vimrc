@@ -29,6 +29,11 @@
 call plug#begin('~/.vim/plugged')
 Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
+Plug 'scrooloose/nerdtree'
+Plug 'vim-scripts/taglist.vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'kien/ctrlp.vim'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 let mapleader = ","
@@ -276,7 +281,7 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 try
-    colorscheme desert
+    colorscheme molokai 
 catch
 endtry
 
