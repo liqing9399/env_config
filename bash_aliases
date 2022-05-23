@@ -17,6 +17,7 @@ alias val='vim ~/.bash_aliases'
 alias vvrc='vim ~/.vimrc'
 
 alias cl='clear'
+alias cdw='cd ~/workspace'
 alias cdd='cd ~/data_struct'
 alias sal='source ~/.bash_aliases'
 alias svrc='source ~/.vimrc'
