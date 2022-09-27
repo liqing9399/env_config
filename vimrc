@@ -34,6 +34,7 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'morhetz/gruvbox'
 call plug#end()
 
 let mapleader = ","
@@ -281,7 +282,8 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 try
-    colorscheme molokai 
+    "colorscheme molokai 
+    colorscheme gruvbox
 catch
 endtry
 
@@ -612,3 +614,9 @@ endfunction
 
 autocmd BufWrite *.cpp,*.hpp,*.c,*.h call C_SetLastModifiedTimes()
 nmap <leader>u : call C_SetLastModifiedTimes()<cr>
+
+set cursorline                          "高亮当前行
+set cursorcolumn                        "高亮当前列
+highlight CursorLine   cterm=NONE ctermbg=green ctermfg=NONE guibg=NONE guifg=NONE
+highlight CursorColumn cterm=NONE ctermbg=green ctermfg=NONE guibg=NONE guifg=NONE
+
