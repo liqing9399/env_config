@@ -570,7 +570,7 @@ function! Script_SetLastModifiedTimes()
     endif
 endfunction
 
-autocmd BufWrite *.sh,*.py call Script_SetLastModifiedTimes()
+"autocmd BufWrite *.sh,*.py call Script_SetLastModifiedTimes()
 
 "新建.cpp, .hpp, .c, .h文件，自动插入文件头
 autocmd BufNewFile *.cpp,*.hpp,*.[ch] exec ":call C_FileHead()"
@@ -612,7 +612,7 @@ function! C_SetLastModifiedTimes()
     endif
 endfunction
 
-autocmd BufWrite *.cpp,*.hpp,*.c,*.h call C_SetLastModifiedTimes()
+"autocmd BufWrite *.cpp,*.hpp,*.c,*.h call C_SetLastModifiedTimes()
 nmap <leader>u : call C_SetLastModifiedTimes()<cr>
 
 set cursorline                          "高亮当前行

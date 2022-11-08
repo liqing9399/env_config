@@ -10,8 +10,11 @@ alias gcma='git commit --amend'
 alias gpl='git pull'
 alias gplr='git pull --rebase'
 alias gps='git push origin master'
+alias gsui=' git submodule update --init'
+alias gsi=' git submodule init'
+alias gsu=' git submodule update '
 
-alias vim="vim -o "
+alias vim="vim -O "
 alias v='vim'
 alias val='vim ~/.bash_aliases'
 alias vvrc='vim ~/.vimrc'
@@ -32,3 +35,10 @@ alias snt='cd ~/stochasticNeuralNetwork/build; ./snnTest; cd -'
 alias gsnt='cd ~/stochasticNeuralNetwork/build; gdb ./snnTest; cd -'
 alias gag='gdb --args'
 alias ct='ctags -R *'
+
+alias g='grep -Iinr  '
+
+alias sshtpu='gcloud compute tpus tpu-vm ssh tpu-lt --zone us-central1-b'
+alias sshtpun='gcloud compute tpus tpu-vm ssh tpu-lt --zone=us-central1-b --ssh-flag="-4 -L 9001:localhost:9001"  '
+alias tpust='gcloud alpha compute tpus tpu-vm start tpu-lt --zone=us-central1-b'
+alias tpusp='gcloud alpha compute tpus tpu-vm stop tpu-lt --zone=us-central1-b'
